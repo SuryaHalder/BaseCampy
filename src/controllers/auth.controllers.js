@@ -21,7 +21,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
   } catch (error) {
     throw new ApiError(
       500,
-      "something went wrong while generating access token",
+      "something went wrong while generating access token"
     );
   }
 };
@@ -57,12 +57,12 @@ const registerUser = asyncHandler(async (req, res) => {
     subject: "Please verify your email",
     mailgenContent: emailVerificationMailgenContent(
       user.username,
-      `${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unHashedToken}`,
+      `${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unHashedToken}`
     ),
   });
 
   const createdUser = await User.findById(user._id).select(
-    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
   );
 
   if (!createdUser) {
@@ -75,8 +75,8 @@ const registerUser = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         { user: createdUser },
-        "User registered successfully and verification email has been sent on your email",
-      ),
+        "User registered successfully and verification email has been sent on your email"
+      )
     );
 });
 
@@ -101,11 +101,11 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
-    user._id,
+    user._id
   );
 
   const loggedInUser = await User.findById(user._id).select(
-    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
   );
 
   const cookieOptions = {
@@ -121,8 +121,8 @@ const loginUser = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         { user: loggedInUser },
-        "User logged in successfully",
-      ),
+        "User logged in successfully"
+      )
     );
 });
 
