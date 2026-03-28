@@ -48,7 +48,7 @@ const registerUser = asyncHandler(async (req, res) => {
     user.generateTemporaryToken();
 
   user.emailVerificationToken = hashedToken;
-  user.emailVerificationToken = tokenExpiry;
+  user.emailVerificationExpiry = tokenExpiry;
 
   await user.save({ validateBeforeSave: false });
 
@@ -126,4 +126,29 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-export { registerUser, loginUser };
+const logoutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        refreshToken: "",
+      },
+    },
+    {
+      new: true,
+    }
+  );
+
+  const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", cookieOptions)
+    .clearCookie("refreshToken", cookieOptions)
+    .json(new ApiResponse(200, {}, "User logged out successfully"));
+});
+
+export { registerUser, loginUser, logoutUser };
