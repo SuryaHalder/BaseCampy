@@ -1,5 +1,6 @@
 import Mailgen from "mailgen";
 import nodemailer from "nodemailer";
+import { ApiError } from "./api-error";
 
 const sendEmail = async (options) => {
   const mailGenerator = new Mailgen({
@@ -38,6 +39,8 @@ const sendEmail = async (options) => {
       "Email service failed silently. Make sure that you have MAILTRAP credentials in the .env file"
     );
     console.error("Error: ", error);
+
+    throw new ApiError(500, "Failed to send email due to a network error.");
   }
 };
 
