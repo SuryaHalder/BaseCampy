@@ -37,4 +37,41 @@ const UserLoginValidator = () => {
   ];
 };
 
-export { UserRegisterValidator, UserLoginValidator };
+const UserForgotPasswordValidator = () => {
+  return [
+    body("email")
+      .notEmpty()
+      .withMessage("Email is required")
+      .isEmail()
+      .withMessage("Email is invalid"),
+  ];
+};
+
+const resetForgotPasswordValidator = () => {
+  return [
+    body("newPassword")
+      .notEmpty()
+      .withMessage("New Password is required")
+      .isLength({ min: 8 })
+      .withMessage("Password must be at least 8 characters long"),
+  ];
+};
+
+const changeCurrentPasswordValidator = () => {
+  return [
+    body("oldPassword").notEmpty().withMessage("Old Password is required"),
+    body("newPassword")
+      .notEmpty()
+      .withMessage("New Password is required")
+      .isLength({ min: 8 })
+      .withMessage("Password must be at least 8 characters long"),
+  ];
+};
+
+export {
+  UserRegisterValidator,
+  UserLoginValidator,
+  UserForgotPasswordValidator,
+  resetForgotPasswordValidator,
+  changeCurrentPasswordValidator,
+};
